@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.programheaven.demo.model.Content;
 import com.programheaven.demo.repository.ContentCollectionRepository;
+import com.programheaven.demo.repository.ContentRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 @CrossOrigin()
 public class ContentController {
 
-    private final ContentCollectionRepository repository;
+    private final ContentRepository repository;
+//    private final ContentJdbcTemplateRepository repository;
 
-    public ContentController(ContentCollectionRepository contentCollectionRepository) {
+    public ContentController(ContentRepository contentCollectionRepository) {
         this.repository = contentCollectionRepository;
 
     }
@@ -49,6 +51,6 @@ public class ContentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

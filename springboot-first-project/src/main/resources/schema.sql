@@ -10,3 +10,7 @@ CREATE TABLE IF NOT EXISTS Content (
     url VARCHAR(255)
 
     );
+
+
+INSERT INTO Content(title, description,status, content_type, date_created)
+VALUES ('My Spring Data Blog Post', 'In this blog we will learn how cool and amazing Springboot is.', 'IDEA', 'ARTICLE', CURRENT_TIMESTAMP);
