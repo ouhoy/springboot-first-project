@@ -3,6 +3,7 @@ package com.programheaven.demo.repository;
 import com.programheaven.demo.model.Content;
 import com.programheaven.demo.model.Status;
 import com.programheaven.demo.model.Type;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,7 @@ public class ContentJdbcTemplateRepository {
 
     public List<Content> getAllContent(){
         String sql = "SELECT * FROM Content";
+        System.out.println("Showing it");
 
         return jdbcTemplate.query(sql, ContentJdbcTemplateRepository::mapRow);
     }
@@ -42,7 +44,7 @@ public class ContentJdbcTemplateRepository {
 
     public void createContent(String title, String desc, Status status, Type contentType, String URL) {
         String sql = "INSERT INTO Content (title, desc, status, content_type, date_created, URL) VALUES (?, ?, ?, ?, NOW(), ?)";
-        jdbcTemplate.update(sql, title, desc, status, contentType, URL);
+        jdbcTemplate.update(sql, title, desc, status.toString(), contentType.toString(), URL);
     }
 
     public void updateContent(int id, String title, String desc, Status status, Type contentType, String URL) {
@@ -56,7 +58,12 @@ public class ContentJdbcTemplateRepository {
     }
 
     public Content getContent(int id) {
-        String sql = "SELECT * FROM Content WHERE id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, ContentJdbcTemplateRepository::mapRow);
+        try {
+            String sql = "SELECT * FROM Content WHERE id=?";
+            return jdbcTemplate.queryForObject(sql, new Object[]{id}, ContentJdbcTemplateRepository::mapRow);
+        } catch (EmptyResultDataAccessException e) {
+            // Handle empty result - throw a custom exception or return null
+            return null; // Or throw a custom exception
+        }
     }
 }
